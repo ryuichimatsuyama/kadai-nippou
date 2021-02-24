@@ -35,6 +35,18 @@
 <textarea name="content" rows="10" cols="50">${report.content}</textarea>
 <br />
 <br />
+<!--６時から９時までしか選択できない。  -->
+<label for="start_time">出勤時間</label>
+<br />
+<input type="time" name="start_time" value="${report.start_time}" />
+<br />
+<br />
+<!--１８時から２１時までしか選択できない。  -->
+<label for="end_time">退勤時間</label>
+<br />
+<input type="time" name="end_time" value="${report.end_time }" />
+<br />
+<br />
 
 <input type="hidden" name="_token" value="${_token}" />
 <button type="submit">投稿</button>

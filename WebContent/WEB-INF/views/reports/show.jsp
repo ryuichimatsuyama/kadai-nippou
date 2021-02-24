@@ -20,9 +20,7 @@
 						</tr>
 						<tr>
 							<th>内容</th>
-							<td>
-							<pre><c:out value="${report.content }" /></pre>
-							</td>
+							<td><pre><c:out value="${report.content }" /></pre></td>
 						</tr>
 						<tr>
 							<th>登録日時</th>
@@ -34,6 +32,12 @@
 							<td><fmt:formatDate value="${report.updated_at }"
 									pattern="yyyy-MM-dd HH:mm:ss" /></td>
 						</tr>
+						<tr>
+							<th>出勤時間</th>
+							<td><pre><c:out value="${report.start_time }" /></pre></td>
+						<tr>
+							<th>退勤期間</th>
+							<td><pre><c:out value="${report.end_time }" /></pre></td>
 					</tbody>
 				</table>
 				<c:if test="${sessionScope.login_employee.id==report.employee.id }">
