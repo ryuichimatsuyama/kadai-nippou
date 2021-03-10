@@ -19,6 +19,7 @@
 					<th class="report_date">日付</th>
 					<th class="report_title">タイトル</th>
 					<th class="report_action">操作</th>
+					<th class="report_status">状態</th>
 				</tr>
 				<c:forEach var="report" items="${reports }" varStatus="status">
 					<tr class="row${status.count%2 }">
@@ -29,7 +30,11 @@
 						<td class="report_title">${report.title }</td>
 						<td class="report_action"><a
 							href="<c:url value='/reports/show?id=${report.id }'/>">詳細を見る</a></td>
-					</tr>
+
+					    <td class="report_status"><c:choose><c:when test="${report.status==0 }">合格</c:when>
+                        <c:when test="${report.status==1 }">不合格</c:when>
+                        <c:otherwise>未承認</c:otherwise></c:choose></td>
+                      </tr>
 				</c:forEach>
 			</tbody>
 		</table>

@@ -13,13 +13,16 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Table(name = "reports")
 @NamedQueries({ @NamedQuery(name = "getAllReports", query = "SELECT r FROM Report AS r ORDER BY r.id DESC"),
 		@NamedQuery(name = "getReportsCount", query = "SELECT COUNT(r) FROM Report AS r"),
-		@NamedQuery(name = "getMyALLReports", query = "SELECT r FROM Report AS r WHERE r.employee=:employee ORDER BY r.id DESC"),
-		@NamedQuery(name = "getMyReportsCount", query = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :employee")
+		@NamedQuery(name = "getMyALLReports", query = "SELECT r FROM Report AS r WHERE  r.employee=:employee ORDER BY r.id DESC"),
+		@NamedQuery(name = "getMyReportsCount", query = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :employee"),
+		@NamedQuery(name = "getBossReports", query = "SELECT r FROM Report AS r WHERE r.boss = :boss and r.status=2 ORDER BY r.id DESC"),
+		@NamedQuery(name = "getBossCount", query = "SELECT COUNT(r) FROM Report AS r WHERE r.boss = :boss and r.status=2")
 
 })
 @Entity
@@ -33,6 +36,29 @@ public class Report {
 	@JoinColumn(name = "employee_id", nullable = false)
 	private Employee employee;
 
+	@OneToOne
+	@JoinColumn(name = "boss_id", nullable = false)
+	private Employee boss;
+
+	public Employee getBoss() {
+		return boss;
+	}
+
+	public void setBoss(Employee boss) {
+		this.boss = boss;
+	}
+
+	@Column(name = "status", nullable = false)
+	private Integer status;
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
 	@Column(name = "report_date", nullable = false)
 	private Date report_date;
 
@@ -44,7 +70,7 @@ public class Report {
 	private String content;
 
 	@Column(name = "start_time", nullable = false)
-	private String  start_time;
+	private String start_time;
 
 	public String getStart_time() {
 		return start_time;

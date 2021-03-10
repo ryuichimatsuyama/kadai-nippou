@@ -138,3 +138,27 @@ pre {
 h3 {
     font-size: larger;
 }
+table#review_list th {
+    font-weight: bold;
+    padding: 10px 2%;
+}
+
+table#review_list .name {
+    width: 10%;
+    padding: 10px 2%;
+}
+table#review_list .title {
+    width: 30%;
+}
+
+table#review_list .review {
+    width: 30%;
+}
+
+table#review_list .approval {
+    width: 10%;
+}
+
+table#review_list .time{
+	width: 10%;
+}

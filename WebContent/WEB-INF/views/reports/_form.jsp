@@ -35,13 +35,22 @@
 <textarea name="content" rows="10" cols="50">${report.content}</textarea>
 <br />
 <br />
-<!--６時から９時までしか選択できない。  -->
+<label for="boss">上司を選択</label>
+<br />
+<select name="boss">
+	<c:forEach var="relation" items="${relations}">
+		<option value="${relation.boss.id}" <c:if test="${relation.boss.id==boss.id }"><c:out value="selected"/></c:if>><c:out value="${relation.boss.name}" />
+	</c:forEach>
+</select>
+<br />
+<br />
+
+
 <label for="start_time">出勤時間</label>
 <br />
 <input type="time" name="start_time" value="${report.start_time}" />
 <br />
 <br />
-<!--１８時から２１時までしか選択できない。  -->
 <label for="end_time">退勤時間</label>
 <br />
 <input type="time" name="end_time" value="${report.end_time }" />

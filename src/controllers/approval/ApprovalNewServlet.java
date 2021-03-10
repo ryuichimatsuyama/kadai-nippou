@@ -1,8 +1,6 @@
-package controllers.reports;
+package controllers.approval;
 
 import java.io.IOException;
-import java.sql.Date;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
@@ -12,22 +10,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import models.Employee;
-import models.Relation;
+import models.Approval;
 import models.Report;
 import utils.DBUtil;
 
 /**
- * Servlet implementation class ReportsNewServlet
+ * Servlet implementation class ApprovalNewServlet
  */
-@WebServlet("/reports/new")
-public class ReportsNewServlet extends HttpServlet {
+@WebServlet("/approvals/new")
+public class ApprovalNewServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public ReportsNewServlet() {
+	public ApprovalNewServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -40,21 +37,17 @@ public class ReportsNewServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		EntityManager em = DBUtil.createEntityManager();
-		// 自分の上司のみをプルダウンに表示
-		Employee login_employee = (Employee) request.getSession().getAttribute("login_employee");
+		// セッションスコープから日報のidを取得して該当のidの日報１件のみをデータベースから取得
+		Report r = em.find(Report.class, (Integer) (request.getSession().getAttribute("report_id")));
 
-		List<Relation> relations = em.createNamedQuery("getMyBoss", Relation.class)
-			.setParameter("employee", login_employee).getResultList();
+		Approval a = new Approval();
 		em.close();
+		request.setAttribute("approval", a);
 		request.setAttribute("_token", request.getSession().getId());
-		Report r = new Report();
-		r.setReport_date(new Date(System.currentTimeMillis()));
 		request.setAttribute("report", r);
-		request.setAttribute("relation", new Relation());
-		request.setAttribute("relations", relations);
+		request.getSession().setAttribute("report_id", r.getId());
 
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/reports/new.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/approvals/new.jsp");
 		rd.forward(request, response);
 	}
-
 }

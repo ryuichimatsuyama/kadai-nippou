@@ -36,12 +36,14 @@ public class ReportsShowServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		EntityManager em = DBUtil.createEntityManager();
-
 		Report r = em.find(Report.class, Integer.parseInt(request.getParameter("id")));
+
 		em.close();
 
 		request.setAttribute("report", r);
 		request.setAttribute("_token", request.getSession().getId());
+		request.getSession().setAttribute("report_id", r.getId());
+
 
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/reports/show.jsp");
 		rd.forward(request, response);

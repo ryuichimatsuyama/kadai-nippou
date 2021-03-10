@@ -15,97 +15,100 @@ import javax.persistence.Table;
 @NamedQueries({ @NamedQuery(name = "getALLEmployees", query = "SELECT e FROM Employee AS e ORDER BY e.id DESC"),
 		@NamedQuery(name = "getEmployeesCount", query = "SELECT COUNT(e)FROM Employee AS e"),
 		@NamedQuery(name = "checkRegisteredCode", query = "SELECT COUNT(e) FROM Employee AS e WHERE e.code = :code"),
-		@NamedQuery(name = "checkLoginCodeAndPassword", query = "SELECT e FROM Employee AS e WHERE e.delete_flag = 0 AND e.code = :code AND e.password = :pass") })
+		@NamedQuery(name = "checkLoginCodeAndPassword", query = "SELECT e FROM Employee AS e WHERE e.delete_flag = 0 AND e.code = :code AND e.password = :pass"),
+		@NamedQuery(name = "getBossCandidates", query = "SELECT e FROM Employee AS e where not e.id = :id ") })
+
 @Entity
 public class Employee {
-@Id
-@Column(name="id")
-@GeneratedValue(strategy=GenerationType.IDENTITY)
-private Integer id;
 
-@Column(name="code",nullable=false,unique=true)
-private String code;
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-@Column(name = "name", nullable = false)
-private String name;
+	@Column(name = "code", nullable = false, unique = true)
+	private String code;
 
-@Column(name = "password", length = 64, nullable = false)
-private String password;
+	@Column(name = "name", nullable = false)
+	private String name;
 
-@Column(name = "admin_flag", nullable = false)
-private Integer admin_flag;
+	@Column(name = "password", length = 64, nullable = false)
+	private String password;
 
-@Column(name = "created_at", nullable = false)
-private Timestamp created_at;
+	@Column(name = "admin_flag", nullable = false)
+	private Integer admin_flag;
 
-@Column(name = "updated_at", nullable = false)
-private Timestamp updated_at;
+	@Column(name = "created_at", nullable = false)
+	private Timestamp created_at;
 
-@Column(name = "delete_flag", nullable = false)
-private Integer delete_flag;
+	@Column(name = "updated_at", nullable = false)
+	private Timestamp updated_at;
 
-public Integer getId() {
-	return id;
-}
+	@Column(name = "delete_flag", nullable = false)
+	private Integer delete_flag;
 
-public void setId(Integer id) {
-	this.id = id;
-}
+	public Integer getId() {
+		return id;
+	}
 
-public String getCode() {
-	return code;
-}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-public void setCode(String code) {
-	this.code = code;
-}
+	public String getCode() {
+		return code;
+	}
 
-public String getName() {
-	return name;
-}
+	public void setCode(String code) {
+		this.code = code;
+	}
 
-public void setName(String name) {
-	this.name = name;
-}
+	public String getName() {
+		return name;
+	}
 
-public String getPassword() {
-	return password;
-}
+	public void setName(String name) {
+		this.name = name;
+	}
 
-public void setPassword(String password) {
-	this.password = password;
-}
+	public String getPassword() {
+		return password;
+	}
 
-public Integer getAdmin_flag() {
-	return admin_flag;
-}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-public void setAdmin_flag(Integer admin_flag) {
-	this.admin_flag = admin_flag;
-}
+	public Integer getAdmin_flag() {
+		return admin_flag;
+	}
 
-public Timestamp getCreated_at() {
-	return created_at;
-}
+	public void setAdmin_flag(Integer admin_flag) {
+		this.admin_flag = admin_flag;
+	}
 
-public void setCreated_at(Timestamp created_at) {
-	this.created_at = created_at;
-}
+	public Timestamp getCreated_at() {
+		return created_at;
+	}
 
-public Timestamp getUpdated_at() {
-	return updated_at;
-}
+	public void setCreated_at(Timestamp created_at) {
+		this.created_at = created_at;
+	}
 
-public void setUpdated_at(Timestamp updated_at) {
-	this.updated_at = updated_at;
-}
+	public Timestamp getUpdated_at() {
+		return updated_at;
+	}
 
-public Integer getDelete_flag() {
-	return delete_flag;
-}
+	public void setUpdated_at(Timestamp updated_at) {
+		this.updated_at = updated_at;
+	}
 
-public void setDelete_flag(Integer delete_flag) {
-	this.delete_flag = delete_flag;
-}
+	public Integer getDelete_flag() {
+		return delete_flag;
+	}
+
+	public void setDelete_flag(Integer delete_flag) {
+		this.delete_flag = delete_flag;
+	}
 
 }

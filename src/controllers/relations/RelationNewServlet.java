@@ -1,7 +1,6 @@
-package controllers.reports;
+package controllers.relations;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -13,21 +12,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models.Employee;
-import models.Relation;
-import models.Report;
 import utils.DBUtil;
 
 /**
- * Servlet implementation class ReportsNewServlet
+ * Servlet implementation class RelationNewServlet
  */
-@WebServlet("/reports/new")
-public class ReportsNewServlet extends HttpServlet {
+@WebServlet("/relations/new")
+public class RelationNewServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public ReportsNewServlet() {
+	public RelationNewServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -38,23 +35,18 @@ public class ReportsNewServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		EntityManager em = DBUtil.createEntityManager();
-		// 自分の上司のみをプルダウンに表示
+
+		// 自分以外の従業員員一覧を取得する。
 		Employee login_employee = (Employee) request.getSession().getAttribute("login_employee");
 
-		List<Relation> relations = em.createNamedQuery("getMyBoss", Relation.class)
-			.setParameter("employee", login_employee).getResultList();
+		List<Employee> employees = em.createNamedQuery("getBossCandidates", Employee.class)
+				.setParameter("id", login_employee.getId()).getResultList();
 		em.close();
-		request.setAttribute("_token", request.getSession().getId());
-		Report r = new Report();
-		r.setReport_date(new Date(System.currentTimeMillis()));
-		request.setAttribute("report", r);
-		request.setAttribute("relation", new Relation());
-		request.setAttribute("relations", relations);
-
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/reports/new.jsp");
+		request.setAttribute("employees", employees);
+		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/relations/new.jsp");
 		rd.forward(request, response);
+
 	}
 
 }

@@ -38,6 +38,9 @@
 						<tr>
 							<th>退勤期間</th>
 							<td><pre><c:out value="${report.end_time }" /></pre></td>
+
+
+
 					</tbody>
 				</table>
 				<c:if test="${sessionScope.login_employee.id==report.employee.id }">
@@ -53,5 +56,10 @@
 		<p>
 			<a href="<c:url value="/reports/index"/>">一覧に戻る</a>
 		</p>
+		<c:if test="${sessionScope.login_employee.id==report.boss.id }">
+		<p>
+			<a href="<c:url value="/approvals/new"/>">レビューを書く</a>
+		</p></c:if>
+
 	</c:param>
 </c:import>

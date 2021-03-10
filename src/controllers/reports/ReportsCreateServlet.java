@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models.Employee;
+import models.Relation;
 import models.Report;
 import models.validators.ReportValidator;
 import utils.DBUtil;
@@ -42,7 +43,8 @@ public class ReportsCreateServlet extends HttpServlet {
 		String _token = (String) request.getParameter("_token");
 		if (_token != null && _token.equals(request.getSession().getId())) {
 			EntityManager em = DBUtil.createEntityManager();
-
+			// 該当の上司の従業員情報１件のみをデータベースから取得
+			Employee boss = em.find(Employee.class, Integer.parseInt(request.getParameter("boss")));
 			Report r = new Report();
 
 			r.setEmployee((Employee) request.getSession().getAttribute("login_employee"));
@@ -52,8 +54,11 @@ public class ReportsCreateServlet extends HttpServlet {
 			if (rd_str != null && !rd_str.equals("")) {
 				report_date = Date.valueOf(request.getParameter("report_date"));
 			}
-			r.setReport_date(report_date);
 
+			// 投稿すると状態は未承認になる
+			r.setStatus(2);
+			r.setReport_date(report_date);
+			r.setBoss(boss);
 			r.setTitle(request.getParameter("title"));
 			r.setContent(request.getParameter("content"));
 			r.setStart_time(request.getParameter("start_time"));
@@ -64,11 +69,15 @@ public class ReportsCreateServlet extends HttpServlet {
 
 			List<String> errors = ReportValidator.validate(r);
 			if (errors.size() > 0) {
-				em.close();
+				List<Relation> relations = em.createNamedQuery("getMyBoss", Relation.class)
+						.setParameter("employee", (Employee) request.getSession().getAttribute("login_employee")).getResultList();
 
+				em.close();
 				request.setAttribute("_token", request.getSession().getId());
 				request.setAttribute("report", r);
 				request.setAttribute("errors", errors);
+				request.setAttribute("boss", boss);
+				request.setAttribute("relations", relations);
 
 				RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/reports/new.jsp");
 				rd.forward(request, response);

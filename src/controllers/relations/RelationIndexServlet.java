@@ -1,7 +1,6 @@
-package controllers.reports;
+package controllers.relations;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -14,20 +13,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import models.Employee;
 import models.Relation;
-import models.Report;
 import utils.DBUtil;
 
 /**
- * Servlet implementation class ReportsNewServlet
+ * Servlet implementation class RelationIndexServlet
  */
-@WebServlet("/reports/new")
-public class ReportsNewServlet extends HttpServlet {
+@WebServlet("/relations/index")
+public class RelationIndexServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public ReportsNewServlet() {
+	public RelationIndexServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -40,20 +38,30 @@ public class ReportsNewServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		EntityManager em = DBUtil.createEntityManager();
-		// 自分の上司のみをプルダウンに表示
 		Employee login_employee = (Employee) request.getSession().getAttribute("login_employee");
-
+		int page = 1;
+		try {
+			page = Integer.parseInt(request.getParameter("page"));
+		} catch (NumberFormatException e) {
+		}
+		// 自分が登録した上司一覧
 		List<Relation> relations = em.createNamedQuery("getMyBoss", Relation.class)
-			.setParameter("employee", login_employee).getResultList();
-		em.close();
-		request.setAttribute("_token", request.getSession().getId());
-		Report r = new Report();
-		r.setReport_date(new Date(System.currentTimeMillis()));
-		request.setAttribute("report", r);
-		request.setAttribute("relation", new Relation());
-		request.setAttribute("relations", relations);
+				.setParameter("employee", login_employee).setFirstResult(15 * (page - 1)).setMaxResults(15)
+				.getResultList();
 
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/reports/new.jsp");
+		long relations_count = (long) em.createNamedQuery("getRelationsCount", Long.class).setParameter("employee", login_employee).getSingleResult();
+
+		em.close();
+
+		request.setAttribute("relations", relations);
+		request.setAttribute("relations_count", relations_count);
+		request.setAttribute("page", page);
+		if (request.getSession().getAttribute("flush") != null) {
+			request.setAttribute("flush", request.getSession().getAttribute("flush"));
+			request.getSession().removeAttribute("flush");
+		}
+
+		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/relations/index.jsp");
 		rd.forward(request, response);
 	}
 
