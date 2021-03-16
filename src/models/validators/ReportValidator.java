@@ -18,6 +18,8 @@ public class ReportValidator {
 		if (!content_error.equals("")) {
 			errors.add(content_error);
 		}
+
+
 		String start_time_error = _validateStart_time(r.getStart_time());
 		if (!start_time_error.equals("")) {
 			errors.add(start_time_error);
@@ -29,6 +31,7 @@ public class ReportValidator {
 
 		return errors;
 	}
+
 
 	private static String _validateTitle(String title) {
 		if (title == null || title.equals("")) {
@@ -46,6 +49,8 @@ public class ReportValidator {
 		return "";
 	}
 
+
+
 	// 正規表現を使って選択できる時間を制限する。
 	private static String _validateStart_time(String start_time) {
 		if (!start_time.matches("^[0][6-9]:[0-5][0-9]$")) {
@@ -61,4 +66,8 @@ public class ReportValidator {
 		}
 		return "";
 	}
+
+
+
 }
+
